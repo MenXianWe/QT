@@ -1,0 +1,573 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>987</width>
+    <height>699</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>90</y>
+      <width>681</width>
+      <height>501</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QTextEdit" name="showDataTextEdit"/>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QComboBox" name="readySendDataComboBox">
+           <item>
+            <property name="text">
+             <string>16 00 01 01 D1 D3</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>16 00 01 11 D3 30 20 42 55 52 47 4C 41 52 59 20 30 30 39 0D 0A 6D</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>16 00 01 11 D3 30 20 44 49 53 41 52 4D 45 44 20 30 31 30 0D 0A 46</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>30 20 42 55 52 47 4C 41 52 59 20 30 30 39 0D 0A</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>30 20 44 49 53 41 52 4D 45 44 20 30 30 39 0D 0A</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="sendDataBtn">
+           <property name="text">
+            <string>发送数据</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="0">
+        <widget class="QLabel" name="serialPortLabel">
+         <property name="text">
+          <string>串口</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2">
+        <widget class="QComboBox" name="stopComboBox">
+         <item>
+          <property name="text">
+           <string>1</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>2</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="3" column="2">
+        <widget class="QComboBox" name="parityComboBox">
+         <item>
+          <property name="text">
+           <string>无</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>奇</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>偶</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="8" column="0">
+        <widget class="QLabel" name="modeLabel">
+         <property name="text">
+          <string>地图：</string>
+         </property>
+        </widget>
+       </item>
+       <item row="12" column="0">
+        <widget class="QCheckBox" name="translateCheckBox">
+         <property name="text">
+          <string>显示解析</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0" colspan="2">
+        <widget class="QLabel" name="dataBitLabel">
+         <property name="text">
+          <string>数据位</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="2">
+        <widget class="QPushButton" name="hStatePushButton">
+         <property name="text">
+          <string>主机状态</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QComboBox" name="serialPortComboBox">
+         <property name="currentIndex">
+          <number>0</number>
+         </property>
+         <item>
+          <property name="text">
+           <string>所有总线</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>ttyS0</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>ttyS1</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>ttyS2</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>ttyS3</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>ttyS4</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>COM1</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>COM2</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>COM3</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>COM4</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>COM5</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>COM6</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>COM7</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="10" column="0" colspan="2">
+        <widget class="QPushButton" name="lightOpenPushButton">
+         <property name="text">
+          <string>开</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0">
+        <widget class="QPushButton" name="broadCastPushButton">
+         <property name="text">
+          <string>广播</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0" colspan="2">
+        <widget class="QPushButton" name="openComBtn">
+         <property name="text">
+          <string>打开串口</string>
+         </property>
+         <property name="checkable">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="0">
+        <widget class="QPushButton" name="allOpenPushButton">
+         <property name="text">
+          <string>全开</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0" colspan="2">
+        <widget class="QLabel" name="parityLabel">
+         <property name="text">
+          <string>校验位</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" colspan="2">
+        <widget class="QLabel" name="baudRateLabel">
+         <property name="text">
+          <string>波特率</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="2">
+        <widget class="QComboBox" name="lightComboBox">
+         <item>
+          <property name="text">
+           <string>001</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>002</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>003</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>004</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>005</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>006</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>007</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>008</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>009</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>010</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>011</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>012</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>013</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>014</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>015</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>016</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>017</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>018</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>019</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>020</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>021</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>022</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>023</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>024</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>025</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>026</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>027</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>028</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>029</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>030</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>031</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>032</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="6" column="0" colspan="2">
+        <widget class="QPushButton" name="volPushButton">
+         <property name="text">
+          <string>电压</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QComboBox" name="baudRateComboBox">
+         <property name="currentIndex">
+          <number>1</number>
+         </property>
+         <item>
+          <property name="text">
+           <string>4800</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>9600</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>19200</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="8" column="2">
+        <widget class="QComboBox" name="modeComboBox">
+         <item>
+          <property name="text">
+           <string>0</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>1</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>2</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>3</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="10" column="2">
+        <widget class="QPushButton" name="lightClosePushButton">
+         <property name="text">
+          <string>关</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="QComboBox" name="dataBitComboBox">
+         <property name="currentIndex">
+          <number>3</number>
+         </property>
+         <item>
+          <property name="text">
+           <string>5</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>6</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>7</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>8</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="9" column="0" colspan="2">
+        <widget class="QLabel" name="lightLabel">
+         <property name="text">
+          <string>灯的位号：</string>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="2">
+        <widget class="QPushButton" name="allClosePushButton">
+         <property name="text">
+          <string>全关</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="2">
+        <widget class="QPushButton" name="closeComBtn">
+         <property name="text">
+          <string>关闭串口</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0" colspan="2">
+        <widget class="QLabel" name="stopLabel">
+         <property name="text">
+          <string>停止位</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="2">
+        <widget class="QPushButton" name="dePushButton">
+         <property name="text">
+          <string>防区</string>
+         </property>
+        </widget>
+       </item>
+       <item row="12" column="2">
+        <widget class="QPushButton" name="clearPushButton">
+         <property name="text">
+          <string>清空</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>987</width>
+     <height>23</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
