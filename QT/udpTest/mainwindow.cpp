@@ -6,7 +6,12 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    readAll="";
+    current_date_time =QDateTime::currentDateTime();
+    current_date =current_date_time.toString("yyyy-MM-dd hh:mm:ss");
+    readAllData="";
+    readAllDataSever="";
+    connectStatus=false;
+    readTimer=new QTimer;
     m_qudpSocket = new QUdpSocket();
     socket=new QTcpSocket;
     data="IALARM:0000000000000<?xml version=\"1.0\" encoding=\"UTF-8\"?><Server><SearchDevice /></Server>";
@@ -16,13 +21,39 @@ MainWindow::MainWindow(QWidget *parent)
     m_qudpSocket->setSocketOption(QAbstractSocket::ReceiveBufferSizeSocketOption,1024*1024*8);//设置缓冲区
     m_qudpSocket->setSocketOption(QAbstractSocket::MulticastLoopbackOption,0);//禁止接收本机内容
     connect(m_qudpSocket,SIGNAL(readyRead()),this,SLOT(RecvData()));//连接接收信号槽
-
+    sever=new QTcpServer(this);
+    severSocket=new QTcpSocket(this);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+
 }
+
+void MainWindow::severAnswer()
+{
+    severSocket=sever->nextPendingConnection();
+    QString ipStr=severSocket->peerAddress().toString();
+    qint16 port=severSocket->peerPort();
+    ui->sendTextEdit->append(QString("[%1:%2]连接成功").arg(ipStr).arg(port));
+    listenTimer=new QTimer;
+    listenTimer->setInterval(1000);
+    connect(severSocket,SIGNAL(readyRead()),this,SLOT(severShowData()));
+}
+
+void MainWindow::sendData(QString data)
+{
+    int len=data.size();
+    QString str=QString("%1").arg(len,13,10,QLatin1Char('0'));
+    QString datah="IALARM:"+str;
+    QString dataAll=datah+data;
+    ui->sendTextEdit->append(dataAll);
+    socket->write(dataAll.toUtf8());
+    connect(socket,SIGNAL(readyRead()),this,SLOT(readInfor()));
+}
+
+
 
 
 void MainWindow::on_sendPushButton_clicked()
@@ -43,7 +74,6 @@ void MainWindow::RecvData()
         ui->receiveTextEdit->setPlainText(strRecvData);
         //qDebug()<<baRecv.data();
 
-
         QString xmlStr=strRecvData.mid(20);
 
         QDomDocument dom;
@@ -55,118 +85,92 @@ void MainWindow::RecvData()
         }
 
         QDomElement root=dom.documentElement();
-           // qDebug()<<root.nodeName();
+
             QDomElement e=root.toElement();
             DeviceIP=e.attribute("DeviceIP");
-            //qDebug()<<DeviceIP;
+
             ui->ipComboBox->addItem(DeviceIP);
 
     }
-    //qDebug()<<"break\n";
-}
 
+}
+//如果TCP连接成功会调用这个槽函数
 void MainWindow::answer()
 {
     ui->sendTextEdit->append(tr("连接成功"));
+    connectStatus=true;//将连接状态设置为true
 }
 
 void MainWindow::readInfor()
 {
-   // qDebug()<<"fgggggggggggggggggggg";
-//    if(socket->bytesAvailable() == 0) {
-//         qDebug()<<"Lgggggggggggggggggggg";
-//        return;
-//    }
-//    QByteArray read=socket->readAll();//收的图片数据
-//    QString lenStr=read.mid(7,13);//获取包头长度
-//    int Datalen=lenStr.toInt();//转换成整数
-//    qDebug()<<lenStr;
-//    qDebug()<<Datalen;
-    //readAll=read+read2;
-QMutexLocker mulo(&mutex);
-readAll.append(socket->readAll());
-
-
-
+    QByteArray read=socket->readAll();//收的图片数据
+    readAllData+=read;
+    QString lenStr=readAllData.mid(7,13);//获取包头中包体的长度
+    int Datalen=lenStr.toInt();//转换成整数
+    qDebug()<<"长度："<<Datalen;
+    qDebug()<<"readALLData长度："<<readAllData.length();
+    if(readAllData.length()-20>=Datalen)
+    {
+        qDebug()<<"判断";
+        checkData(readAllData,Datalen);
+         readAllData="";
+    }
     ui->receiveTextEdit->append(read);//可以完整显示数据
-    qDebug()<<"xxxxxxxx"<<read;//只能显示部分数据,收到的数据不完整
-   // 测试发现数据太大，readyReady（connect(socket,SIGNAL(readyRead()),this,SLOT(readInfor()));）触发多次，请问怎么解决这样的问题
-
-//    dealReceData();
-//    ui->receiveTextEdit->setText(infoBlock);
-    //readInfor();
 }
 
-void MainWindow::dealReceData()
+void MainWindow::checkData(QByteArray data,int len)
 {
-
-    //递归边界：跳出处理
-        if(socket->bytesAvailable() == 0) return;//缓存
-
-        //处理帧头
-            if(receivedBytes < sizeof (qint64) && infoBlock.length() == 0){
-                 if(socket->bytesAvailable() >= sizeof (qint64) && s_frameHead.size() == 0){
-                       s_frameHead = socket->read(sizeof (qint64));
-    qDebug()<<"s_frameHead:"<<s_frameHead.toHex().toUpper();
-                   }else{
-   qDebug()<<"接收头返回";
-                     return;
-                 }
-            }
-            //持续接收帧体数据
-        if(receivedBytes < totalBytes && socket->bytesAvailable() > 0){
-                //QByteArray inBlock = tcpSocket->readAll();
-               if(socket->bytesAvailable() >= (totalBytes - receivedBytes)){
-                    inBlock = socket->read(totalBytes - receivedBytes);
-               }else{
-                    inBlock = socket->readAll();
-               }
-
-                infoBlock.append(inBlock);
-
-                receivedBytes += inBlock.size();
-     // qDebug()<<"inBlock:"<<byteArrayToHexStr(inBlock);
-    qDebug()<<"持续接收receivedBytes:"<<receivedBytes;
-                inBlock.resize(0);
-
-            }
-            //一帧数据收满开始处理
-         if(receivedBytes == totalBytes){
-                //处理
-            }
-            //如果还是有残留数据，再递归处理数据
-            //此处还可以增加特判帧头里的类型字段，来判断是否要递归立即处理，还是等下次数据来触发信号后再处理
-                if(socket->bytesAvailable() > 0 ){
-                dealReceData();
-            }
-
-
-
+        data=data.mid(20,len);
+        QDomDocument dom;
+        QString errorMsg;
+        int errorLine, errorColumn;
+        if(!dom.setContent(data, &errorMsg, &errorLine, &errorColumn)) {
+            qDebug() << "CHeck Parse error at line " +  errorMsg;
+        }
+        QDomElement root=dom.documentElement();
+        QDomElement firstChild=root.firstChildElement();
+        QString  imgDataStr=firstChild.text();
+        QPixmap image;
+        QSize pixSize(341,231);
+        image.loadFromData(QByteArray::fromBase64(imgDataStr.toLocal8Bit()));
+        QPixmap scaledPixmap = image.scaled(pixSize, Qt::KeepAspectRatio);
+        ui->imgLabel->setPixmap(scaledPixmap);
+        ui->imgLabel->setAlignment(Qt::AlignCenter);
 }
 
-void MainWindow::out()
+void MainWindow::severShowData()
 {
-    readInfor();
+    qDebug()<<"ssssssssssssssss";
+    QByteArray read=severSocket->readAll();//收的图片数据
+    qDebug()<<"read:"<<read;
+    readAllDataSever+=read;
+    QString lenStr=readAllDataSever.mid(7,13);//获取包头中包体的长度
+    int Datalen=lenStr.toInt();//转换成整数
+    qDebug()<<"长度："<<Datalen;
+    qDebug()<<"readAllDataSever长度："<<readAllDataSever.length();
+    if(readAllDataSever.length()-20>=Datalen)
+    {
+        qDebug()<<"判断";
+        checkData(readAllDataSever,Datalen);
+         readAllDataSever="";
+    }
+    ui->receiveTextEdit->append(read);//可以完整显示数据
+}
 
+
+void MainWindow::showImage()
+{
+    QString imgDataw=QString("<?xml version=\"1.0\" encoding=\"UTF-8\"?><Server TargetIP=\"%1\" NowTime=\"%2\"><GetBasicPic /></Server>").arg(DeviceIP).arg(current_date);
+    sendData(imgDataw);
 }
 
 void MainWindow::on_showPixPushButton_clicked()
 {
     //send
-    QDateTime current_date_time =QDateTime::currentDateTime();
-    QString current_date =current_date_time.toString("yyyy-MM-dd hh:mm:ss");
-   // qDebug()<<current_date;
-    //QString imgDatah=QString("IALARM:0000000000124"
-    QString imgDataw=QString("<?xml version=\"1.0\" encoding=\"UTF-8\"?><Server TargetIP=\"%1\" NowTime=\"%2\"><GetBasicPic /></Server>").arg(DeviceIP).arg(current_date);
-    int len=imgDataw.size();
-     QString str=QString("%1").arg(len,13,10,QLatin1Char('0'));
-    QString imgDatah="IALARM:"+str;
-    QString imgData=imgDatah+imgDataw;
-    // QString sendText=ui->sendTextEdit->toPlainText();
-    ui->sendTextEdit->append(imgData);
-    socket->write(imgData.toUtf8());
-    connect(socket,SIGNAL(readyRead()),this,SLOT(readInfor()));
-    //qDebug()<<"111111"<<str;
+
+    readTimer->setInterval(1000);
+    readTimer->start();
+    connect(readTimer,SIGNAL(timeout()),this,SLOT(showImage()));
 }
 
 void MainWindow::on_pushButton_2_clicked()
@@ -180,7 +184,7 @@ void MainWindow::on_connectPushButton_clicked()
 
     //connect
     QString ipStr=ui->ipComboBox->currentText();
-    //qDebug()<<ipStr;
+
     qint16 port=ui->portComboBox->currentText().toInt();
     socket->connectToHost((QHostAddress)ipStr,port);
     connect(socket,SIGNAL(connected()),this,SLOT(answer()));
@@ -188,26 +192,30 @@ void MainWindow::on_connectPushButton_clicked()
 
 void MainWindow::on_disconnectPushButton_clicked()
 {
-
     //disconnect
+    connectStatus=false;
+    readTimer->stop();
     socket->disconnectFromHost();
 }
 
-void MainWindow::on_pushButton_clicked()
+void MainWindow::on_openAlarmPushButton_clicked()
 {
-    readAll=readAll.mid(20);
-    qDebug()<<"readALL0000000000000"<<readAll;
-    QDomDocument dom;
-    QString errorMsg;
-    int errorLine, errorColumn;
-    if(!dom.setContent(readAll, &errorMsg, &errorLine, &errorColumn)) {
-        qDebug() << "Parse error at line " +  errorMsg;
-    }
+    //启动服务
+    QString startServiceDataw=QString("<?xml version=\"1.0\" encoding=\"UTF-8\"?><Server TargetIP=\"%1\" NowTime=\"%2\"><StartServices /></Server>").arg(DeviceIP).arg(current_date);
+    sendData(startServiceDataw);
 
-    QDomElement root=dom.documentElement();
-    qDebug()<<root.nodeName();
-    QDomElement firstChild=root.firstChildElement();
-    qDebug() << firstChild.tagName();
-    QByteArray imgDataStr=firstChild.text().toUtf8();
-    qDebug()<<"11111111111111111"<<imgDataStr;
+
+}
+
+void MainWindow::on_closeSerivePushButton_clicked()
+{
+    QString closeSeriveData=QString("<?xml version=\"1.0\" encoding=\"UTF-8\"?><Server TargetIP=\"%1\" NowTime=\"%2\"><StopServices /></Server>").arg(DeviceIP).arg(current_date);
+    sendData(closeSeriveData);
+}
+
+void MainWindow::on_alarmPushButton_clicked()
+{
+    //监听6901
+    sever->listen(QHostAddress::Any,6901);
+    connect(sever,SIGNAL(newConnection()),this,SLOT(severAnswer()));
 }

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>1024</width>
+    <height>719</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -49,45 +49,66 @@
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>460</x>
-      <y>40</y>
+      <x>450</x>
+      <y>380</y>
       <width>291</width>
       <height>161</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="2" column="2">
-      <widget class="QPushButton" name="sendPushButton">
-       <property name="text">
-        <string>广播</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="2">
-      <widget class="QComboBox" name="ipComboBox"/>
-     </item>
      <item row="1" column="0">
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>端口：</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0">
       <widget class="QLabel" name="label">
        <property name="text">
         <string>IP地址：</string>
        </property>
       </widget>
      </item>
-     <item row="3" column="1">
-      <widget class="QPushButton" name="connectPushButton">
+     <item row="4" column="0">
+      <widget class="QPushButton" name="showPixPushButton">
        <property name="text">
-        <string>连接</string>
+        <string>显示图片</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QComboBox" name="ipComboBox"/>
+     </item>
+     <item row="3" column="0">
+      <widget class="QPushButton" name="pushButton_2">
+       <property name="text">
+        <string>清空</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QPushButton" name="openAlarmPushButton">
+       <property name="text">
+        <string>开启服务</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QPushButton" name="sendPushButton">
+       <property name="text">
+        <string>广播</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QPushButton" name="closeSerivePushButton">
+       <property name="text">
+        <string>关闭服务</string>
        </property>
       </widget>
      </item>
      <item row="3" column="2">
+      <widget class="QPushButton" name="alarmPushButton">
+       <property name="text">
+        <string>开始监听</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="2">
       <widget class="QPushButton" name="disconnectPushButton">
        <property name="text">
         <string>断开连接</string>
@@ -95,20 +116,6 @@
       </widget>
      </item>
      <item row="2" column="1">
-      <widget class="QPushButton" name="pushButton_2">
-       <property name="text">
-        <string>清空</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="0">
-      <widget class="QPushButton" name="showPixPushButton">
-       <property name="text">
-        <string>显示图片</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="2">
       <widget class="QComboBox" name="portComboBox">
        <item>
         <property name="text">
@@ -138,13 +145,39 @@
       </widget>
      </item>
      <item row="2" column="0">
-      <widget class="QPushButton" name="pushButton">
+      <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>出现</string>
+        <string>端口：</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QPushButton" name="connectPushButton">
+       <property name="text">
+        <string>连接</string>
        </property>
       </widget>
      </item>
     </layout>
+   </widget>
+   <widget class="QLabel" name="imgLabel">
+    <property name="geometry">
+     <rect>
+      <x>440</x>
+      <y>60</y>
+      <width>341</width>
+      <height>231</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Panel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Sunken</enum>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -152,7 +185,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>1024</width>
      <height>23</height>
     </rect>
    </property>
